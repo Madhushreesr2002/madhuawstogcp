@@ -1,0 +1,59 @@
+
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR Public...
+      - aws --version
+      - docker --version
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t frontend-app .
+      - docker tag frontend-app:latest public.ecr.aws/i5n8n4i7/frontend-repo:latest
+
+  post_build:
+    commands:
+      - echo Pushing Docker image to Public ECR...
+      - docker push public.ecr.aws/i5n8n4i7/frontend-repo:latest
+
+      - echo Registering new ECS task definition...
+      - |
+        aws ecs register-task-definition \
+          --region ap-south-1 \
+          --family capstone-task-definition \
+          --network-mode awsvpc \
+          --requires-compatibilities FARGATE \
+          --cpu "256" \
+          --memory "512" \
+          --execution-role-arn arn:aws:iam::209561933103:role/ecsTaskExecutionRole \
+          --container-definitions '[
+              {
+                "name": "frontend-app",
+                "image": "public.ecr.aws/i5n8n4i7/frontend-repo:latest",
+                "essential": true,
+                "portMappings": [
+                  {
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp"
+                  }
+                ]
+              }
+            ]'
+
+      - echo Updating ECS service...
+      - |
+        aws ecs update-service \
+          --region ap-south-1 \
+          --cluster capestone-cluster \
+          --service capstone-task-definition-service-j95qywgd\
+          --force-new-deployment \
+          --network-configuration "awsvpcConfiguration={subnets=[subnet-06dc0fd87bfe5a8b6],securityGroups=[sg-029beaf9489126e73],assignPublicIp=ENABLED}"
+
+artifacts:
+  files:
+    - imagedefinitions.json

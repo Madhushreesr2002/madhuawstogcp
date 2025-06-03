@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Order Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #222;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #fdfdfd;
+        }
+
+        input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            background-color: #ff6f61;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e85c50;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST">
+        <h2>Place Your Food Order</h2>
+
+        <label>Email:</label>
+        <input type="email" name="email" required>
+
+        <label>Password:</label>
+        <input type="password" name="password" required>
+
+        <label>Restaurant:</label>
+        <select name="restaurant" required>
+            <option value="KFC">KFC</option>
+            <option value="Dominos">Dominos</option>
+            <option value="Pizza Hut">Pizza Hut</option>
+        </select>
+
+        <label>Food Item:</label>
+        <select name="food_item" required>
+            <option value="Burger">Burger</option>
+            <option value="Pizza">Pizza</option>
+            <option value="Fries">Fries</option>
+        </select>
+
+        <label>Quantity:</label>
+        <input type="number" name="quantity" min="1" required>
+
+        <label>Payment Method:</label>
+        <input type="radio" id="cod" name="payment_method" value="Cash on Delivery" required>
+        <label for="cod" style="display: inline; font-weight: normal;">Cash on Delivery</label>
+
+        <label>Address:</label>
+        <textarea name="address" rows="3" required></textarea>
+
+        <label>Suggestions:</label>
+        <textarea name="suggestions" rows="3"></textarea>
+
+        <button type="submit">Submit Order</button>
+    </form>
+</body>
+</html>
